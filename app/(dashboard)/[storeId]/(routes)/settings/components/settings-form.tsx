@@ -9,7 +9,7 @@ import { useState } from "react";
 import axios from "axios";
 import * as z from "zod";
 
-import { AlertModal } from "@/components/modals/alert.modal";
+import { AlertModal } from "@/components/modals/alert-modal";
 import { Separator } from "@/components/ui/separator";
 import { ApiAlert } from "@/components/ui/api-alert";
 import { Heading } from "@/components/ui/heading";
