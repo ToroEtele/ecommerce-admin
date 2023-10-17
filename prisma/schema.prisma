@@ -23,14 +23,15 @@ model Store {
 }
 
 model Billboard {
-  id         String     @id @default(uuid())
-  storeId    String
-  store      Store      @relation("StoreToBillboard", fields: [storeId], references: [id])
-  label      String
-  imageUrl   String
-  categories Category[]
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id            String        @id @default(uuid())
+  storeId       String
+  store         Store         @relation("StoreToBillboard", fields: [storeId], references: [id])
+  label         String
+  imageUrl      String
+  categories    Category[]
+  subcategories Subcategory[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
   @@index([storeId])
 }
@@ -42,11 +43,23 @@ model Category {
   billboardId String
   billboard   Billboard @relation(fields: [billboardId], references: [id])
   name        String
-  products    Product[] @relation("CategoryToProduct")
+  // products    Product[] @relation("CategoryToProduct")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
   @@index([storeId])
+  @@index([billboardId])
+}
+
+model Subcategory {
+  id          String    @id @default(uuid())
+  billboardId String
+  billboard   Billboard @relation(fields: [billboardId], references: [id])
+  name        String
+  products    Product[] @relation("SubcategoryToProduct")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
   @@index([billboardId])
 }
 
@@ -55,7 +68,8 @@ model Product {
   storeId     String
   store       Store       @relation("StoreToProduct", fields: [storeId], references: [id])
   categoryId  String
-  category    Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  // category    Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  subcategory Subcategory @relation("SubcategoryToProduct", fields: [categoryId], references: [id])
   name        String
   price       Decimal
   description String      @default("")
