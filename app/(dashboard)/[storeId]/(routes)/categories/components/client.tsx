@@ -22,6 +22,7 @@ export const CategoriesClient: React.FC<CategoriesClientProps> = ({ data }) => {
 
   return (
     <>
+      {/* Categories */}
       <div className="flex items-center justify-between">
         <Heading
           title={`Categories (${data.length})`}
@@ -35,6 +36,21 @@ export const CategoriesClient: React.FC<CategoriesClientProps> = ({ data }) => {
       </div>
       <Separator />
       <DataTable searchKey="name" columns={columns} data={data} />
+      {/* Subcategories */}
+      <div className="flex items-center justify-between">
+        <Heading
+          title={`Subcategories (${data.length})`}
+          description="Manage subcategories for your store"
+        />
+        <Button
+          onClick={() => router.push(`/${params.storeId}/subcategories/new`)}
+        >
+          <Plus className="mr-2 h-4 w-4" /> Add New
+        </Button>
+      </div>
+      <Separator />
+      <DataTable searchKey="name" columns={columns} data={data} />
+      {/* API endpoints */}
       <Heading title="API" description="API Calls for Categories" />
       <Separator />
       <ApiList entityName="categories" entityIdName="categoryId" />
