@@ -86,7 +86,7 @@ export const SubategoryForm: React.FC<SubcategoryFormProps> = ({
         await axios.post(`/api/${params.storeId}/subcategories`, data);
       }
       router.refresh();
-      router.push(`/${params.storeId}/subcategories`);
+      router.push(`/${params.storeId}/categories`);
       toast.success(toastMessage);
     } catch (error: any) {
       toast.error("Something went wrong.");
@@ -102,7 +102,7 @@ export const SubategoryForm: React.FC<SubcategoryFormProps> = ({
         `/api/${params.storeId}/subcategories/${params.categoryId}`
       );
       router.refresh();
-      router.push(`/${params.storeId}/subcategories`);
+      router.push(`/${params.storeId}/categories`);
       toast.success("Subcategory deleted.");
     } catch (error: any) {
       toast.error(

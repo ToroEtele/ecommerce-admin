@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
-import { ApiAlert } from "@/components/ui/api-alert";
 
 import { columns, CategoryColumn } from "./columns";
 import {
@@ -22,9 +21,11 @@ interface CategoriesClientProps {
   subcategoryData: SubcategoryColumn[];
 }
 
+export const revalidate = 0;
+
 export const CategoriesClient: React.FC<CategoriesClientProps> = ({
-  subcategoryData,
   categoryData,
+  subcategoryData,
 }) => {
   const params = useParams();
   const router = useRouter();
@@ -44,7 +45,12 @@ export const CategoriesClient: React.FC<CategoriesClientProps> = ({
         </Button>
       </div>
       <Separator />
-      <DataTable searchKey="name" columns={columns} data={categoryData} />
+      <DataTable
+        searchKey="name"
+        columns={columns}
+        data={categoryData}
+        key="categories"
+      />
       {/* Subcategories */}
       <div className="flex items-center justify-between">
         <Heading
@@ -62,6 +68,7 @@ export const CategoriesClient: React.FC<CategoriesClientProps> = ({
         searchKey="name"
         columns={subcategoryColum}
         data={subcategoryData}
+        key="subcategories"
       />
       {/* API endpoints */}
       <Heading title="API" description="API Calls for Categories" />
