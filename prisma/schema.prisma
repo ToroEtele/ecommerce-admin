@@ -51,26 +51,26 @@ model Category {
 }
 
 model Product {
-  id         String   @id @default(uuid())
-  storeId    String
-  store      Store    @relation("StoreToProduct", fields: [storeId], references: [id])
-  categoryId String
-  category   Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
-  name       String
-  price      Decimal
-  isFeatured Boolean  @default(false)
-  isArchived Boolean  @default(false)
-  sizeId     String
-  size       Size     @relation(fields: [sizeId], references: [id])
-  colorId    String
-  color      Color    @relation(fields: [colorId], references: [id])
-  images     Image[]
-  // images     Image[] // Relation to Image model
-  // orderItems OrderItem[] // Relation to Order model
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  OrderItem OrderItem[]
+  id          String      @id @default(uuid())
+  storeId     String
+  store       Store       @relation("StoreToProduct", fields: [storeId], references: [id])
+  categoryId  String
+  category    Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  name        String
+  price       Decimal
+  description String      @default("")
+  isFeatured  Boolean     @default(false)
+  isArchived  Boolean     @default(false)
+  // This properties
+  sizeId      String
+  size        Size        @relation(fields: [sizeId], references: [id])
+  colorId     String
+  color       Color       @relation(fields: [colorId], references: [id])
+  // until here
+  images      Image[]
+  orderItems  OrderItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
   @@index([storeId])
   @@index([categoryId])
@@ -92,7 +92,6 @@ model Order {
   @@index([storeId])
 }
 
-// Intermediary for a many-to-many relationship
 model OrderItem {
   id        String  @id @default(uuid())
   orderId   String // Foreign Key to Order
