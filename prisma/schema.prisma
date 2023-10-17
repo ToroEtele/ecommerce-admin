@@ -68,30 +68,29 @@ model Subcategory {
 }
 
 model Product {
-  id          String      @id @default(uuid())
-  storeId     String
-  store       Store       @relation("StoreToProduct", fields: [storeId], references: [id])
-  categoryId  String
-  // category    Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
-  subcategory Subcategory @relation("SubcategoryToProduct", fields: [categoryId], references: [id])
-  name        String
-  price       Decimal
-  description String      @default("")
-  isFeatured  Boolean     @default(false)
-  isArchived  Boolean     @default(false)
+  id            String      @id @default(uuid())
+  storeId       String
+  store         Store       @relation("StoreToProduct", fields: [storeId], references: [id])
+  subcategoryId String
+  subcategory   Subcategory @relation("SubcategoryToProduct", fields: [subcategoryId], references: [id])
+  name          String
+  price         Decimal
+  description   String      @default("")
+  isFeatured    Boolean     @default(false)
+  isArchived    Boolean     @default(false)
   // This properties
-  sizeId      String
-  size        Size        @relation(fields: [sizeId], references: [id])
-  colorId     String
-  color       Color       @relation(fields: [colorId], references: [id])
+  sizeId        String
+  size          Size        @relation(fields: [sizeId], references: [id])
+  colorId       String
+  color         Color       @relation(fields: [colorId], references: [id])
   // until here
-  images      Image[]
-  orderItems  OrderItem[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  images        Image[]
+  orderItems    OrderItem[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
   @@index([storeId])
-  @@index([categoryId])
+  @@index([subcategoryId])
   @@index([sizeId])
   @@index([colorId])
 }

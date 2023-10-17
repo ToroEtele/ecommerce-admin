@@ -18,7 +18,7 @@ export async function GET(
       },
       include: {
         images: true,
-        category: true,
+        subcategory: true,
         size: true,
         color: true,
       },
@@ -83,7 +83,7 @@ export async function PATCH(
       name,
       price,
       description,
-      categoryId,
+      subcategoryId,
       images,
       colorId,
       sizeId,
@@ -111,7 +111,7 @@ export async function PATCH(
       return new NextResponse("Price is required", { status: 400 });
     }
 
-    if (!categoryId) {
+    if (!subcategoryId) {
       return new NextResponse("Category id is required", { status: 400 });
     }
 
@@ -142,7 +142,7 @@ export async function PATCH(
         name,
         description,
         price,
-        categoryId,
+        subcategoryId,
         colorId,
         sizeId,
         images: {
