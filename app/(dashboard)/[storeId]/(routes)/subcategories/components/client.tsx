@@ -7,26 +7,16 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
+import { ApiAlert } from "@/components/ui/api-alert";
 
-import { columns, CategoryColumn } from "./columns";
-import {
-  columns as subcategoryColum,
-  SubcategoryColumn,
-} from "../../subcategories/components/columns";
-
+import { columns, SubcategoryColumn } from "./columns";
 import { ApiList } from "@/components/ui/api-list";
 
 interface CategoriesClientProps {
-  categoryData: CategoryColumn[];
-  subcategoryData: SubcategoryColumn[];
+  data: SubcategoryColumn[];
 }
 
-export const revalidate = 0;
-
-export const CategoriesClient: React.FC<CategoriesClientProps> = ({
-  categoryData,
-  subcategoryData,
-}) => {
+export const CategoriesClient: React.FC<CategoriesClientProps> = ({ data }) => {
   const params = useParams();
   const router = useRouter();
 
@@ -35,7 +25,7 @@ export const CategoriesClient: React.FC<CategoriesClientProps> = ({
       {/* Categories */}
       <div className="flex items-center justify-between">
         <Heading
-          title={`Categories (${categoryData.length})`}
+          title={`Categories (${data.length})`}
           description="Manage categories for your store"
         />
         <Button
@@ -45,16 +35,11 @@ export const CategoriesClient: React.FC<CategoriesClientProps> = ({
         </Button>
       </div>
       <Separator />
-      <DataTable
-        searchKey="name"
-        columns={columns}
-        data={categoryData}
-        key="categories"
-      />
+      <DataTable searchKey="name" columns={columns} data={data} />
       {/* Subcategories */}
       <div className="flex items-center justify-between">
         <Heading
-          title={`Subcategories (${subcategoryData.length})`}
+          title={`Subcategories (${data.length})`}
           description="Manage subcategories for your store"
         />
         <Button
@@ -64,12 +49,7 @@ export const CategoriesClient: React.FC<CategoriesClientProps> = ({
         </Button>
       </div>
       <Separator />
-      <DataTable
-        searchKey="name"
-        columns={subcategoryColum}
-        data={subcategoryData}
-        key="subcategories"
-      />
+      <DataTable searchKey="name" columns={columns} data={data} />
       {/* API endpoints */}
       <Heading title="API" description="API Calls for Categories" />
       <Separator />

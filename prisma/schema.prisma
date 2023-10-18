@@ -23,57 +23,74 @@ model Store {
 }
 
 model Billboard {
-  id         String     @id @default(uuid())
-  storeId    String
-  store      Store      @relation("StoreToBillboard", fields: [storeId], references: [id])
-  label      String
-  imageUrl   String
-  categories Category[]
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id            String        @id @default(uuid())
+  storeId       String
+  store         Store         @relation("StoreToBillboard", fields: [storeId], references: [id])
+  label         String
+  imageUrl      String
+  categories    Category[]
+  subcategories Subcategory[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
   @@index([storeId])
 }
 
 model Category {
-  id          String    @id @default(uuid())
-  storeId     String
-  store       Store     @relation("StoreToCategory", fields: [storeId], references: [id])
-  billboardId String
-  billboard   Billboard @relation(fields: [billboardId], references: [id])
-  name        String
-  products    Product[] @relation("CategoryToProduct")
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id            String        @id @default(uuid())
+  storeId       String
+  store         Store         @relation("StoreToCategory", fields: [storeId], references: [id])
+  billboardId   String
+  billboard     Billboard     @relation(fields: [billboardId], references: [id])
+  name          String
+  // products    Product[] @relation("CategoryToProduct")
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  subcategories Subcategory[] @relation("SubcategoryToCategory")
 
   @@index([storeId])
   @@index([billboardId])
 }
 
-model Product {
-  id          String      @id @default(uuid())
-  storeId     String
-  store       Store       @relation("StoreToProduct", fields: [storeId], references: [id])
-  categoryId  String
-  category    Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
+model Subcategory {
+  id          String    @id @default(uuid())
+  billboardId String
+  billboard   Billboard @relation(fields: [billboardId], references: [id])
   name        String
-  price       Decimal
-  description String      @default("")
-  isFeatured  Boolean     @default(false)
-  isArchived  Boolean     @default(false)
+  categoryId  String
+  category    Category  @relation("SubcategoryToCategory", fields: [categoryId], references: [id])
+  products    Product[] @relation("SubcategoryToProduct")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([billboardId])
+  @@index([categoryId])
+}
+
+model Product {
+  id            String      @id @default(uuid())
+  storeId       String
+  store         Store       @relation("StoreToProduct", fields: [storeId], references: [id])
+  subcategoryId String
+  subcategory   Subcategory @relation("SubcategoryToProduct", fields: [subcategoryId], references: [id])
+  name          String
+  price         Decimal
+  description   String      @default("")
+  isFeatured    Boolean     @default(false)
+  isArchived    Boolean     @default(false)
   // This properties
-  sizeId      String
-  size        Size        @relation(fields: [sizeId], references: [id])
-  colorId     String
-  color       Color       @relation(fields: [colorId], references: [id])
+  sizeId        String
+  size          Size        @relation(fields: [sizeId], references: [id])
+  colorId       String
+  color         Color       @relation(fields: [colorId], references: [id])
   // until here
-  images      Image[]
-  orderItems  OrderItem[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  images        Image[]
+  orderItems    OrderItem[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
   @@index([storeId])
-  @@index([categoryId])
+  @@index([subcategoryId])
   @@index([sizeId])
   @@index([colorId])
 }
