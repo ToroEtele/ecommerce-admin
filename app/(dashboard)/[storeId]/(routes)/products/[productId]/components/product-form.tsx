@@ -1,6 +1,13 @@
 "use client";
 
-import { Category, Color, Image, Product, Size } from "@prisma/client";
+import {
+  Category,
+  Color,
+  Image,
+  Product,
+  Size,
+  Subcategory,
+} from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -40,6 +47,7 @@ const formSchema = z.object({
   description: z.string(),
   images: z.object({ url: z.string() }).array(),
   price: z.coerce.number().min(1),
+  subcategoryId: z.string().min(1),
   categoryId: z.string().min(1),
   colorId: z.string().min(1),
   sizeId: z.string().min(1),
@@ -55,6 +63,7 @@ interface ProductFormProps {
         images: Image[];
       })
     | null;
+  subcategories: Subcategory[];
   categories: Category[];
   colors: Color[];
   sizes: Size[];
@@ -62,6 +71,7 @@ interface ProductFormProps {
 
 export const ProductForm: React.FC<ProductFormProps> = ({
   initialData,
+  subcategories,
   categories,
   sizes,
   colors,
@@ -71,6 +81,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>();
 
   const title = initialData ? "Edit product" : "Create product";
   const description = initialData ? "Edit a product." : "Add a new product";
@@ -232,7 +243,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   <FormLabel>Category</FormLabel>
                   <Select
                     disabled={loading}
-                    onValueChange={field.onChange}
+                    onValueChange={(e) => {
+                      field.onChange(e);
+                      setSelectedCategory(e);
+                    }}
                     value={field.value}
                     defaultValue={field.value}
                   >
@@ -250,6 +264,43 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                           {category.name}
                         </SelectItem>
                       ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="subcategoryId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Subcategory</FormLabel>
+                  <Select
+                    disabled={loading}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a subcategory"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {subcategories
+                        .filter((item) => {
+                          if (selectedCategory === undefined) return true;
+                          return item.categoryId === selectedCategory;
+                        })
+                        .map((category) => (
+                          <SelectItem key={category.id} value={category.id}>
+                            {category.name}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />
