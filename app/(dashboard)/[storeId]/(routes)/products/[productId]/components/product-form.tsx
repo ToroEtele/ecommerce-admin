@@ -43,8 +43,11 @@ import {
 } from "@/components/ui/form";
 
 const formSchema = z.object({
-  name: z.string().min(1),
-  description: z.string(),
+  name_hu: z.string().min(1),
+  name_ro: z.string().min(1),
+  description_hu: z.string(),
+  description_ro: z.string(),
+  quantity: z.coerce.number(),
   images: z.object({ url: z.string() }).array(),
   price: z.coerce.number().min(1),
   subcategoryId: z.string().min(1),
@@ -91,10 +94,17 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const defaultValues = initialData
     ? {
         ...initialData,
+        //@ts-ignore
+        categoryId: initialData.subcategory.category.id,
         price: parseFloat(String(initialData?.price)),
+        qantity: parseFloat(String(initialData?.quantity)),
       }
     : {
-        name: "",
+        name_hu: "",
+        name_ro: "",
+        description_hu: "",
+        description_ro: "",
+        quantity: 0,
         images: [],
         price: 0,
         categoryId: "",
@@ -202,10 +212,27 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           <div className="md:grid md:grid-cols-3 gap-8">
             <FormField
               control={form.control}
-              name="name"
+              name="name_hu"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Name (hu)</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Product name"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="name_ro"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name (ro)</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
@@ -228,6 +255,24 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       type="number"
                       disabled={loading}
                       placeholder="9.99"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="quantity"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Quantity</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      disabled={loading}
+                      placeholder="0"
                       {...field}
                     />
                   </FormControl>
@@ -416,14 +461,31 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           </div>
           <FormField
             control={form.control}
-            name="description"
+            name="description_hu"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
                   <Textarea
                     disabled={loading}
-                    placeholder="Product description"
+                    placeholder="Product description (hu)"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description_ro"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea
+                    disabled={loading}
+                    placeholder="Product description (ro)"
                     {...field}
                   />
                 </FormControl>

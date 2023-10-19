@@ -80,9 +80,12 @@ export async function PATCH(
     const body = await req.json();
 
     const {
-      name,
+      name_hu,
+      name_ro,
       price,
-      description,
+      description_hu,
+      description_ro,
+      quantity,
       subcategoryId,
       images,
       colorId,
@@ -91,37 +94,26 @@ export async function PATCH(
       isArchived,
     } = body;
 
-    if (!userId) {
-      return new NextResponse("Unauthenticated", { status: 403 });
-    }
-
-    if (!params.productId) {
+    if (!userId) return new NextResponse("Unauthenticated", { status: 403 });
+    if (!params.productId)
       return new NextResponse("Product id is required", { status: 400 });
-    }
-
-    if (!name) {
-      return new NextResponse("Name is required", { status: 400 });
-    }
-
-    if (!images || !images.length) {
+    if (!name_hu) return new NextResponse("Name is required", { status: 400 });
+    if (!name_ro) return new NextResponse("Name is required", { status: 400 });
+    if (!images || !images.length)
       return new NextResponse("Images are required", { status: 400 });
-    }
-
-    if (!price) {
-      return new NextResponse("Price is required", { status: 400 });
-    }
-
-    if (!subcategoryId) {
+    if (!price) return new NextResponse("Price is required", { status: 400 });
+    if (quantity === undefined || quantity === null)
+      return new NextResponse("Quantity is required", { status: 400 });
+    if (!subcategoryId)
       return new NextResponse("Category id is required", { status: 400 });
-    }
-
-    if (!colorId) {
+    if (!colorId)
       return new NextResponse("Color id is required", { status: 400 });
-    }
-
-    if (!sizeId) {
+    if (!sizeId)
       return new NextResponse("Size id is required", { status: 400 });
-    }
+    if (!description_hu)
+      return new NextResponse("Description is required", { status: 400 });
+    if (!description_ro)
+      return new NextResponse("Description is required", { status: 400 });
 
     const storeByUserId = await prismadb.store.findFirst({
       where: {
@@ -139,9 +131,12 @@ export async function PATCH(
         id: params.productId,
       },
       data: {
-        name,
-        description,
+        name_hu,
+        description_hu,
+        name_ro,
+        description_ro,
         price,
+        quantity,
         subcategoryId,
         colorId,
         sizeId,
