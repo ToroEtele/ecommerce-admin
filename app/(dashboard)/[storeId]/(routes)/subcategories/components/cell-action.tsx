@@ -47,7 +47,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success("Category ID copied to clipboard.");
+    toast.success("Subcategory ID copied to clipboard.");
   };
 
   return (
@@ -72,7 +72,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() =>
-              router.push(`/${params.storeId}/categories/${data.id}`)
+              router.push(`/${params.storeId}/subcategories/${data.id}`)
             }
           >
             <Edit className="mr-2 h-4 w-4" /> Update

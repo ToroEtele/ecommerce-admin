@@ -36,7 +36,8 @@ const CategoriesPage = async ({ params }: { params: { storeId: string } }) => {
 
   const formattedCategories: CategoryColumn[] = categories.map((item) => ({
     id: item.id,
-    name: item.name,
+    name_hu: item.name_hu,
+    name_ro: item.name_ro,
     billboardLabel: item.billboard.label,
     createdAt: format(item.createdAt, "MMMM do, yyyy"),
   }));
@@ -44,9 +45,10 @@ const CategoriesPage = async ({ params }: { params: { storeId: string } }) => {
   const formattedSubcategories: SubcategoryColumn[] = subcategories.map(
     (item) => ({
       id: item.id,
-      name: item.name,
+      name_hu: item.name_hu,
+      name_ro: item.name_ro,
       billboardLabel: item.billboard.label,
-      categoryLabel: item.category.name,
+      categoryLabel: item.category.name_hu,
       createdAt: format(item.createdAt, "MMMM do, yyyy"),
     })
   );

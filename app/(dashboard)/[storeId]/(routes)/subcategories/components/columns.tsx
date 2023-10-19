@@ -6,7 +6,8 @@ import { CellAction } from "./cell-action";
 
 export type SubcategoryColumn = {
   id: string;
-  name: string;
+  name_hu: string;
+  name_ro: string;
   billboardLabel: string;
   categoryLabel: string;
   createdAt: string;
@@ -14,8 +15,12 @@ export type SubcategoryColumn = {
 
 export const columns: ColumnDef<SubcategoryColumn>[] = [
   {
-    accessorKey: "name",
-    header: "Name",
+    accessorKey: "name_hu",
+    header: "Name (hu)",
+  },
+  {
+    accessorKey: "name_ro",
+    header: "Name (ro)",
   },
   {
     accessorKey: "billboard",

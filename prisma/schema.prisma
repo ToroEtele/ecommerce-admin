@@ -42,8 +42,8 @@ model Category {
   store         Store         @relation("StoreToCategory", fields: [storeId], references: [id])
   billboardId   String
   billboard     Billboard     @relation(fields: [billboardId], references: [id])
-  name          String
-  // products    Product[] @relation("CategoryToProduct")
+  name_hu       String        @default("")
+  name_ro       String        @default("")
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   subcategories Subcategory[] @relation("SubcategoryToCategory")
@@ -56,7 +56,8 @@ model Subcategory {
   id          String    @id @default(uuid())
   billboardId String
   billboard   Billboard @relation(fields: [billboardId], references: [id])
-  name        String
+  name_hu     String    @default("")
+  name_ro     String    @default("")
   categoryId  String
   category    Category  @relation("SubcategoryToCategory", fields: [categoryId], references: [id])
   products    Product[] @relation("SubcategoryToProduct")

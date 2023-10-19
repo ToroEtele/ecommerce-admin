@@ -69,12 +69,13 @@ export async function PATCH(
   try {
     const { userId } = auth();
     const body = await req.json();
-    const { name, billboardId, categoryId } = body;
+    const { name_hu, name_ro, billboardId, categoryId } = body;
 
     if (!userId) return new NextResponse("Unauthenticated", { status: 403 });
     if (!billboardId)
       return new NextResponse("Billboard ID is required", { status: 400 });
-    if (!name) return new NextResponse("Name is required", { status: 400 });
+    if (!name_hu) return new NextResponse("Name is required", { status: 400 });
+    if (!name_ro) return new NextResponse("Name is required", { status: 400 });
     if (!categoryId)
       return new NextResponse("Category id is required", { status: 400 });
     if (!params.subcategoryId)
@@ -94,7 +95,8 @@ export async function PATCH(
         id: params.subcategoryId,
       },
       data: {
-        name,
+        name_ro,
+        name_hu,
         billboardId,
         categoryId,
       },

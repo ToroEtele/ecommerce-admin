@@ -46,7 +46,7 @@ export const CategoriesClient: React.FC<CategoriesClientProps> = ({
       </div>
       <Separator />
       <DataTable
-        searchKey="name"
+        searchKey="name_hu"
         columns={columns}
         data={categoryData}
         key="categories"
@@ -65,7 +65,7 @@ export const CategoriesClient: React.FC<CategoriesClientProps> = ({
       </div>
       <Separator />
       <DataTable
-        searchKey="name"
+        searchKey="name_hu"
         columns={subcategoryColum}
         data={subcategoryData}
         key="subcategories"

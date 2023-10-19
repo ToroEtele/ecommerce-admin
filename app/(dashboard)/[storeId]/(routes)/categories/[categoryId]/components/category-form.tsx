@@ -32,7 +32,8 @@ import {
 } from "@/components/ui/select";
 
 const formSchema = z.object({
-  name: z.string().min(2),
+  name_hu: z.string().min(2),
+  name_ro: z.string().min(2),
   billboardId: z.string().min(1),
 });
 
@@ -61,7 +62,8 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
-      name: "",
+      name_hu: "",
+      name_ro: "",
       billboardId: "",
     },
   });
@@ -136,14 +138,31 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
           <div className="md:grid md:grid-cols-3 gap-8">
             <FormField
               control={form.control}
-              name="name"
+              name="name_hu"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Name (hu)</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Category name"
+                      placeholder="Category name (hu)"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="name_ro"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name (ro)</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Category name (ro)"
                       {...field}
                     />
                   </FormControl>

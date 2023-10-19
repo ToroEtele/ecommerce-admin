@@ -59,6 +59,22 @@ export async function POST(req: Request) {
         },
       },
       data: {
+        quantity: {
+          decrement: 1,
+        },
+      },
+    });
+
+    await prismadb.product.updateMany({
+      where: {
+        id: {
+          in: [...productIds],
+        },
+        quantity: {
+          equals: 0,
+        },
+      },
+      data: {
         isArchived: true,
       },
     });

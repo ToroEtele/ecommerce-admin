@@ -28,9 +28,10 @@ const SubcategoriesPage = async ({
   const formattedSubcategories: SubcategoryColumn[] = subcategories.map(
     (item) => ({
       id: item.id,
-      name: item.name,
+      name_hu: item.name_hu,
+      name_ro: item.name_ro,
       billboardLabel: item.billboard.label,
-      categoryLabel: item.category.name,
+      categoryLabel: item.category.name_hu,
       createdAt: format(item.createdAt, "MMMM do, yyyy"),
     })
   );
