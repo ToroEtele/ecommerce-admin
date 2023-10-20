@@ -32,7 +32,8 @@ import {
 } from "@/components/ui/select";
 
 const formSchema = z.object({
-  name: z.string().min(2),
+  name_hu: z.string().min(2),
+  name_ro: z.string().min(2),
   billboardId: z.string().min(1),
   categoryId: z.string().min(1),
 });
@@ -68,7 +69,8 @@ export const SubategoryForm: React.FC<SubcategoryFormProps> = ({
   const form = useForm<SubcategoryFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
-      name: "",
+      name_hu: "",
+      name_ro: "",
       billboardId: "",
       categoryId: "",
     },
@@ -79,7 +81,7 @@ export const SubategoryForm: React.FC<SubcategoryFormProps> = ({
       setLoading(true);
       if (initialData) {
         await axios.patch(
-          `/api/${params.storeId}/subcategories/${params.categoryId}`,
+          `/api/${params.storeId}/subcategories/${initialData.id}`,
           data
         );
       } else {
@@ -144,10 +146,27 @@ export const SubategoryForm: React.FC<SubcategoryFormProps> = ({
           <div className="md:grid md:grid-cols-3 gap-8">
             <FormField
               control={form.control}
-              name="name"
+              name="name_hu"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Name (hu)</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Subcategory name"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="name_ro"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name (ro)</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
@@ -214,7 +233,7 @@ export const SubategoryForm: React.FC<SubcategoryFormProps> = ({
                     <SelectContent>
                       {categories.map((category) => (
                         <SelectItem key={category.id} value={category.id}>
-                          {category.name}
+                          {category.name_hu}
                         </SelectItem>
                       ))}
                     </SelectContent>

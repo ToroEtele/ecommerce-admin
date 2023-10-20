@@ -14,15 +14,13 @@ const ProductPage = async ({
     include: {
       subcategory: {
         select: {
-          name: true,
+          name_hu: true,
           category: true,
         },
       },
       images: true,
     },
   });
-
-  console.log(product);
 
   const subcategories = await prismadb.subcategory.findMany({
     where: {

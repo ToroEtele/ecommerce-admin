@@ -306,7 +306,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     <SelectContent>
                       {categories.map((category) => (
                         <SelectItem key={category.id} value={category.id}>
-                          {category.name}
+                          {category.name_hu}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -343,7 +343,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                         })
                         .map((category) => (
                           <SelectItem key={category.id} value={category.id}>
-                            {category.name}
+                            {category.name_hu}
                           </SelectItem>
                         ))}
                     </SelectContent>

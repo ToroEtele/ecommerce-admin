@@ -14,7 +14,7 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
     include: {
       subcategory: {
         select: {
-          name: true,
+          name_hu: true,
           category: true,
         },
       },
@@ -33,14 +33,12 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
     isFeatured: item.isFeatured,
     isArchived: item.isArchived,
     price: formatter.format(item.price.toNumber()),
-    category: item.subcategory.category.name,
-    subcategory: item.subcategory.name,
+    category: item.subcategory.category.name_hu,
+    subcategory: item.subcategory.name_hu,
     size: item.size.name,
     color: item.color.value,
     createdAt: format(item.createdAt, "MMMM do, yyyy"),
   }));
-
-  console.log(formattedProducts);
 
   return (
     <div className="flex-col">
