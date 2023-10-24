@@ -75,19 +75,19 @@ model Product {
   subcategoryId  String
   subcategory    Subcategory @relation("SubcategoryToProduct", fields: [subcategoryId], references: [id])
   price          Decimal
-  quantity       Int         @default(0)
-  name_hu        String      @default("")
-  name_ro        String      @default("")
-  description_hu String      @default("")
-  description_ro String      @default("")
-  isFeatured     Boolean     @default(false)
-  isArchived     Boolean     @default(false)
+  quantity       Int
+  name_hu        String
+  name_ro        String
+  description_hu String
+  description_ro String
+  isFeatured     Boolean
+  isArchived     Boolean
   sizeId         String
   size           Size        @relation(fields: [sizeId], references: [id])
   colorId        String
   color          Color       @relation(fields: [colorId], references: [id])
   images         Image[]
-  orderItems     OrderItem[]
+  orderItems     OrderItem[] @relation("OrderItemToProduct")
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 
@@ -116,7 +116,7 @@ model OrderItem {
   orderId   String // Foreign Key to Order
   order     Order   @relation(fields: [orderId], references: [id])
   productId String // Foreign Key to Product
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product @relation("OrderItemToProduct", fields: [productId], references: [id])
   quantity  Int     @default(1)
 
   @@index([orderId])

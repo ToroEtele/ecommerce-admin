@@ -18,16 +18,19 @@ export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
-  const { productIds, lng } = await req.json();
+  const { products: productsOrdered, lng } = await req.json();
 
-  if (!productIds || productIds.length === 0) {
+  console.log("HELLO");
+  if (!productsOrdered || productsOrdered.length === 0) {
     return new NextResponse("Product ids are required", { status: 400 });
   }
+
+  console.log("HELLO");
 
   const products = await prismadb.product.findMany({
     where: {
       id: {
-        in: productIds,
+        in: productsOrdered.map((p: { id: string; qty: never }) => p.id),
       },
     },
   });
@@ -52,11 +55,11 @@ export async function POST(
       storeId: params.storeId,
       isPaid: false,
       orderItems: {
-        create: productIds.map((productId: string, quantity: string) => ({
+        create: productsOrdered.map((product: { id: string; qty: number }) => ({
           product: {
             connect: {
-              id: productId,
-              quantity: quantity,
+              id: product.id,
+              quantity: product.qty,
             },
           },
         })),

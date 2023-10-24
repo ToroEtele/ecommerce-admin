@@ -1,7 +1,23 @@
+import prismadb from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
+
+export async function POST(
+  req: Request,
+  { params }: { params: { storeId: string } }
+) {
   const body = await req.json();
+
+  const { products, lng, checkoutData } = body;
   const {
     name,
     email,
@@ -18,7 +34,7 @@ export async function POST(req: Request) {
     cmp_state,
     cmp_bank,
     cmp_cont,
-  } = body;
+  } = checkoutData;
 
   if (!name) return new NextResponse("Name is required", { status: 400 });
   if (!email) return new NextResponse("Email is required", { status: 400 });
@@ -43,4 +59,36 @@ export async function POST(req: Request) {
     if (!cmp_cont)
       return new NextResponse("Company contact is required", { status: 400 });
   }
+
+  if (!products || products.length === 0) {
+    return new NextResponse("Product ids are required", { status: 400 });
+  }
+
+  console.log(products);
+
+  const order = await prismadb.order.create({
+    data: {
+      storeId: params.storeId,
+      isPaid: false,
+      phone,
+      address: `${state}, ${city}, ${address}`,
+      orderItems: {
+        create: products.map((product: { id: string; qty: number }) => ({
+          product: {
+            connect: {
+              id: product.id,
+              quantity: product.qty,
+            },
+          },
+        })),
+      },
+    },
+  });
+
+  return NextResponse.json(
+    { url: process.env.FRONTEND_STORE_URL },
+    {
+      headers: corsHeaders,
+    }
+  );
 }
