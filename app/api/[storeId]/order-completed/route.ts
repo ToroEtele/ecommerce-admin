@@ -64,8 +64,6 @@ export async function POST(
     return new NextResponse("Product ids are required", { status: 400 });
   }
 
-  console.log(products);
-
   const order = await prismadb.order.create({
     data: {
       storeId: params.storeId,
@@ -77,11 +75,38 @@ export async function POST(
           product: {
             connect: {
               id: product.id,
-              quantity: product.qty,
             },
           },
+          quantity: product.qty,
         })),
       },
+    },
+  });
+
+  products.map(async (product: { id: string; qty: number }) => {
+    await prismadb.product.update({
+      where: {
+        id: product.id,
+      },
+      data: {
+        quantity: {
+          decrement: product.qty,
+        },
+      },
+    });
+  });
+
+  await prismadb.product.updateMany({
+    where: {
+      id: {
+        in: [...products.map((p: { id: string; qty: number }) => p.id)],
+      },
+      quantity: {
+        equals: 0,
+      },
+    },
+    data: {
+      isArchived: true,
     },
   });
 

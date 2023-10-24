@@ -1,13 +1,5 @@
 "use client";
 
-import {
-  Category,
-  Color,
-  Image,
-  Product,
-  Size,
-  Subcategory,
-} from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -16,6 +8,14 @@ import { Trash } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
 import * as z from "zod";
+import {
+  Category,
+  Color,
+  Image,
+  Product,
+  Size,
+  Subcategory,
+} from "@prisma/client";
 
 import { AlertModal } from "@/components/modals/alert-modal";
 import ImageUpload from "@/components/ui/image-upload";
@@ -122,7 +122,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const onSubmit = async (data: ProductFormValues) => {
     try {
       setLoading(true);
-      if (initialData) {
+      if (!initialData) {
         await axios.patch(
           `/api/${params.storeId}/products/${params.productId}`,
           data

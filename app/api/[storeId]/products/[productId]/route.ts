@@ -122,6 +122,8 @@ export async function PATCH(
       },
     });
 
+    console.log("NEW QUANTITY", quantity);
+
     if (!storeByUserId) {
       return new NextResponse("Unauthorized", { status: 405 });
     }

@@ -20,12 +20,9 @@ export async function POST(
 ) {
   const { products: productsOrdered, lng } = await req.json();
 
-  console.log("HELLO");
   if (!productsOrdered || productsOrdered.length === 0) {
     return new NextResponse("Product ids are required", { status: 400 });
   }
-
-  console.log("HELLO");
 
   const products = await prismadb.product.findMany({
     where: {
