@@ -98,15 +98,30 @@ model Product {
 }
 
 model Order {
-  id         String      @id @default(uuid())
-  storeId    String // Foreign Key to Store
-  store      Store       @relation("StoreToOrder", fields: [storeId], references: [id])
-  orderItems OrderItem[] // Relation to OrderItem model
-  isPaid     Boolean     @default(false)
-  phone      String      @default("")
-  address    String      @default("")
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  id             String      @id @default(uuid())
+  storeId        String // Foreign Key to Store
+  store          Store       @relation("StoreToOrder", fields: [storeId], references: [id])
+  orderItems     OrderItem[] // Relation to OrderItem model
+  isPaid         Boolean     @default(false)
+  isCanceled     Boolean     @default(false)
+  isDelivered    Boolean     @default(false)
+  clientName     String      @default("")
+  email          String      @default("")
+  phone          String      @default("")
+  address        String      @default("")
+  city           String      @default("")
+  state          String      @default("")
+  zipCode        String      @default("")
+  isCompany      Boolean     @default(false)
+  companyName    String      @default("")
+  companyCUI     String      @default("")
+  companyAddress String      @default("")
+  companyCity    String      @default("")
+  companyState   String      @default("")
+  companyBank    String      @default("")
+  companyIBAN    String      @default("")
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
 
   @@index([storeId])
 }

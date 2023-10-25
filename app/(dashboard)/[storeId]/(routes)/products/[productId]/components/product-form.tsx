@@ -122,12 +122,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const onSubmit = async (data: ProductFormValues) => {
     try {
       setLoading(true);
-      if (!initialData) {
+      if (initialData) {
+        console.log("PRODUCT UPDATED");
         await axios.patch(
           `/api/${params.storeId}/products/${params.productId}`,
           data
         );
       } else {
+        console.log("PRODUCT ADDED");
         await axios.post(`/api/${params.storeId}/products`, data);
       }
       router.refresh();

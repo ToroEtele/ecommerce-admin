@@ -10,6 +10,7 @@ export type OrderColumn = {
   totalPrice: string;
   products: string;
   createdAt: string;
+  isCanceled: boolean;
 };
 
 export const columns: ColumnDef<OrderColumn>[] = [
@@ -32,5 +33,9 @@ export const columns: ColumnDef<OrderColumn>[] = [
   {
     accessorKey: "isPaid",
     header: "Paid",
+  },
+  {
+    accessorKey: "isCanceled",
+    header: "Canceled",
   },
 ];
