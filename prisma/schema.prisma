@@ -99,12 +99,13 @@ model Product {
 
 model Order {
   id             String      @id @default(uuid())
-  storeId        String // Foreign Key to Store
+  storeId        String
   store          Store       @relation("StoreToOrder", fields: [storeId], references: [id])
-  orderItems     OrderItem[] // Relation to OrderItem model
+  orderItems     OrderItem[]
   isPaid         Boolean     @default(false)
   isCanceled     Boolean     @default(false)
   isDelivered    Boolean     @default(false)
+  // Contact Info
   clientName     String      @default("")
   email          String      @default("")
   phone          String      @default("")
@@ -120,8 +121,9 @@ model Order {
   companyState   String      @default("")
   companyBank    String      @default("")
   companyIBAN    String      @default("")
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([storeId])
 }
