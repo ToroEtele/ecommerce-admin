@@ -37,9 +37,10 @@ const OrdersPage = async ({ params }: { params: { storeId: string } }) => {
         return total + Number(item.product.price);
       }, 0)
     ),
-    isPaid: item.isPaid,
+    isPaid: item.isPaid ? "Yes" : "No",
     createdAt: format(item.createdAt, "MMMM do, yyyy"),
-    isCanceled: item.isCanceled,
+    isCanceled: item.isCanceled ? "Yes" : "No",
+    isDelivered: item.isDelivered ? "Yes" : "No",
   }));
 
   return (

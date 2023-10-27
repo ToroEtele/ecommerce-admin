@@ -15,11 +15,11 @@ const InvoiceDetails = ({ order }: { order: Order }) => {
     state: order.companyState,
   };
   return (
-    <>
+    <div className="mb-5">
       <Heading title={`Invoicing details`} description="" />
       <Separator className="mt-5" />
       <DataTable columns={columns} data={[processedInvoiceData]} />
-    </>
+    </div>
   );
 };
 

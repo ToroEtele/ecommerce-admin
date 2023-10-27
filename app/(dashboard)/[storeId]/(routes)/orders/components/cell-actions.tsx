@@ -15,14 +15,32 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { OrderColumn } from "./columns";
+import axios from "axios";
 
 interface CellActionProps {
   data: OrderColumn;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
   const params = useParams();
+
+  const onChangeDeliveryState = async (id: string, current: boolean) => {
+    try {
+      setLoading(true);
+      await axios.patch(`/api/${params.storeId}/orders/${id}`, {
+        isDelivered: current,
+      });
+      toast.success("Changes applied.");
+      router.refresh();
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -47,8 +65,18 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         >
           <Edit className="mr-2 h-4 w-4" /> More Informations
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => {}}>
-          <Check className="mr-2 h-4 w-4" /> Mark as delivered
+        <DropdownMenuItem
+          onClick={async () =>
+            await onChangeDeliveryState(
+              data.id,
+              data.isDelivered === "Yes" ? false : true
+            )
+          }
+        >
+          <Check className="mr-2 h-4 w-4" />{" "}
+          {data.isDelivered === "No"
+            ? `Mark as delivered`
+            : `Mark as not delivered`}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

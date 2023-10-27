@@ -5,6 +5,7 @@ import OrderDetails from "./components/order-details";
 import InvoiceDetails from "./components/invoice-details";
 import ItemsOrdered from "./components/items-ordered";
 import { Heading } from "@/components/ui/heading";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface OrderPageProps {
   params: {
@@ -58,7 +59,32 @@ const OrderPage = async ({ params }: OrderPageProps) => {
         {order.isCompany && <InvoiceDetails order={order} />}
         <ItemsOrdered items={items} />
 
-        <Heading title={`Total: ${totalPrice} RON`} description={description} />
+        <div className="flex gap-10">
+          <Heading
+            title={`Total: ${totalPrice} RON`}
+            description={description}
+          />
+          {!order.isCanceled ? (
+            <div className="flex flex-row items-center justify-center space-x-3 space-y-0 rounded-md border p-4">
+              <Checkbox checked={order.isPaid} className="text-green-500 " />
+              <div className="space-y-1 leading-none">
+                <h1 className="font-bold">Is Delivered?</h1>
+                <p className="text-sm">
+                  Check if the order was succesfully delivered
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-row items-center justify-center space-x-3 space-y-0 rounded-md border p-4 border-red-600/60">
+              <div className="space-y-1 leading-none">
+                <h1 className="font-bold text-red-600">Canceled!</h1>
+                <p className="text-sm">
+                  This order was canceled by the customer!
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
