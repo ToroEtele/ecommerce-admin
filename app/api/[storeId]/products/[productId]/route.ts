@@ -92,6 +92,7 @@ export async function PATCH(
       sizeId,
       isFeatured,
       isArchived,
+      isNew,
     } = body;
 
     if (!userId) return new NextResponse("Unauthenticated", { status: 403 });
@@ -140,6 +141,7 @@ export async function PATCH(
         subcategoryId,
         colorId,
         sizeId,
+        isNew,
         images: {
           deleteMany: {},
         },

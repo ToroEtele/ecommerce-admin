@@ -61,6 +61,7 @@ model Subcategory {
   categoryId  String
   category    Category  @relation("SubcategoryToCategory", fields: [categoryId], references: [id])
   products    Product[] @relation("SubcategoryToProduct")
+  sizes       Size[]    @relation("SizesToSubcategories")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
@@ -80,6 +81,7 @@ model Product {
   name_ro        String
   description_hu String
   description_ro String
+  isNew          Boolean     @default(false)
   isFeatured     Boolean
   isArchived     Boolean
   sizeId         String
@@ -141,14 +143,16 @@ model OrderItem {
 }
 
 model Size {
-  id        String    @id @default(uuid())
-  storeId   String // Foreign Key to Store
-  store     Store     @relation("StoreToSize", fields: [storeId], references: [id])
-  name      String
-  value     String
-  products  Product[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id            String        @id @default(uuid())
+  storeId       String // Foreign Key to Store
+  store         Store         @relation("StoreToSize", fields: [storeId], references: [id])
+  name          String        @default("")
+  subcategories Subcategory[] @relation("SizesToSubcategories")
+  value_hu      String        @default("")
+  value_ro      String        @default("")
+  products      Product[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
   @@index([storeId])
 }

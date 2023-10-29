@@ -12,7 +12,7 @@ export async function POST(
 
     const body = await req.json();
 
-    const { name, value } = body;
+    const { name, value_hu, value_ro, subcategories } = body;
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 403 });
@@ -21,9 +21,16 @@ export async function POST(
     if (!name) {
       return new NextResponse("Name is required", { status: 400 });
     }
+    if (!value_hu) {
+      return new NextResponse("Value (hu) is required", { status: 400 });
+    }
 
-    if (!value) {
-      return new NextResponse("Value is required", { status: 400 });
+    if (!value_ro) {
+      return new NextResponse("Value (ro) is required", { status: 400 });
+    }
+
+    if (!subcategories) {
+      return new NextResponse("Subcategory is required", { status: 400 });
     }
 
     if (!params.storeId) {
@@ -44,8 +51,14 @@ export async function POST(
     const size = await prismadb.size.create({
       data: {
         name,
-        value,
+        value_hu,
+        value_ro,
         storeId: params.storeId,
+        subcategories: {
+          connect: subcategories.map((s: { value: string; label: string }) => ({
+            id: s.value,
+          })),
+        },
       },
     });
 
@@ -64,10 +77,21 @@ export async function GET(
     if (!params.storeId) {
       return new NextResponse("Store id is required", { status: 400 });
     }
+    const { searchParams } = new URL(req.url);
+    const categoryId = searchParams.get("categoryId") || undefined;
+    const subcategoryId = searchParams.get("subcategoryId") || undefined;
 
     const sizes = await prismadb.size.findMany({
       where: {
         storeId: params.storeId,
+        subcategories: {
+          some: {
+            id: subcategoryId,
+            category: {
+              id: categoryId,
+            },
+          },
+        },
       },
     });
 

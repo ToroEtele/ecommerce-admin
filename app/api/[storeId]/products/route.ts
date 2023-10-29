@@ -25,6 +25,7 @@ export async function POST(
       images,
       isFeatured,
       isArchived,
+      isNew,
     } = body;
 
     if (!userId) return new NextResponse("Unauthenticated", { status: 403 });
@@ -63,6 +64,7 @@ export async function POST(
         quantity,
         isFeatured,
         isArchived,
+        isNew,
         subcategoryId,
         colorId,
         sizeId,
@@ -92,6 +94,7 @@ export async function GET(
     const categoryId = searchParams.get("categoryId") || undefined;
     const colorId = searchParams.get("colorId") || undefined;
     const sizeId = searchParams.get("sizeId") || undefined;
+    const isNew = searchParams.get("isNew") || undefined;
     const isFeatured = searchParams.get("isFeatured");
 
     if (!params.storeId)
@@ -108,6 +111,7 @@ export async function GET(
         sizeId,
         isFeatured: isFeatured ? true : undefined,
         isArchived: false,
+        isNew: isNew ? true : undefined,
       },
       include: {
         images: true,

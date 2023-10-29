@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { Trash } from "lucide-react";
-import { Size } from "@prisma/client";
+import { Size, Subcategory } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -23,19 +24,46 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 import { AlertModal } from "@/components/modals/alert-modal";
+import { SelectComponent } from "@/components/ui/multi-select";
 
 const formSchema = z.object({
   name: z.string().min(1),
-  value: z.string().min(1),
+  value_ro: z.string().min(1),
+  value_hu: z.string().min(1),
+  subcategories: z.array(z.any()),
 });
 
 type SizeFormValues = z.infer<typeof formSchema>;
 
 interface SizeFormProps {
-  initialData: Size | null;
+  initialData:
+    | ({
+        subcategories: {
+          id: string;
+          billboardId: string;
+          name_hu: string;
+          name_ro: string;
+          categoryId: string;
+          createdAt: Date;
+          updatedAt: Date;
+        }[];
+      } & {
+        id: string;
+        storeId: string;
+        name: string;
+        value_hu: string;
+        value_ro: string;
+        createdAt: Date;
+        updatedAt: Date;
+      })
+    | null;
+  subcategories: Subcategory[];
 }
 
-export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
+export const SizeForm: React.FC<SizeFormProps> = ({
+  initialData,
+  subcategories,
+}) => {
   const params = useParams();
   const router = useRouter();
 
@@ -49,12 +77,27 @@ export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
 
   const form = useForm<SizeFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData || {
-      name: "",
-    },
+    defaultValues: initialData
+      ? {
+          name: initialData.name,
+          value_hu: initialData.value_hu,
+          value_ro: initialData.value_ro,
+          subcategories: initialData.subcategories.map((s) => ({
+            label: s.name_hu,
+            value: s.id,
+          })),
+        }
+      : {
+          name: "",
+          value_hu: "",
+          value_ro: "",
+        },
   });
 
+  console.log(initialData);
+
   const onSubmit = async (data: SizeFormValues) => {
+    console.log(data);
     try {
       setLoading(true);
       if (initialData) {
@@ -137,10 +180,10 @@ export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
             />
             <FormField
               control={form.control}
-              name="value"
+              name="value_hu"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Value</FormLabel>
+                  <FormLabel>Value (hu)</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
@@ -148,6 +191,49 @@ export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="value_ro"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Value (ro)</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Size value"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="subcategories"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Subcategories</FormLabel>
+                  <FormDescription>
+                    Assign size to subcategories.
+                  </FormDescription>
+                  <SelectComponent
+                    createAble={true}
+                    isMulti={true}
+                    // value={field.value}
+                    options={subcategories?.map((s) => ({
+                      label: s.name_hu,
+                      value: s.id,
+                    }))}
+                    // onChange={field.onChange}
+                    placeholder="Select Subcategories"
+                    {...field}
+                  />
                   <FormMessage />
                 </FormItem>
               )}

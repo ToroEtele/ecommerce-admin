@@ -7,7 +7,8 @@ import { CellAction } from "./cell-action";
 export type SizeColumn = {
   id: string;
   name: string;
-  value: string;
+  value_hu: string;
+  value_ro: string;
   createdAt: string;
 };
 
@@ -17,8 +18,12 @@ export const columns: ColumnDef<SizeColumn>[] = [
     header: "Name",
   },
   {
-    accessorKey: "value",
-    header: "Value",
+    accessorKey: "value_hu",
+    header: "Value (hu)",
+  },
+  {
+    accessorKey: "value_ro",
+    header: "Value (ro)",
   },
   {
     accessorKey: "createdAt",

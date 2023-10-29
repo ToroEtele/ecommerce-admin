@@ -56,6 +56,7 @@ const formSchema = z.object({
   sizeId: z.string().min(1),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
+  isNew: z.boolean().default(true).optional(),
 });
 
 type ProductFormValues = z.infer<typeof formSchema>;
@@ -112,6 +113,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         sizeId: "",
         isFeatured: false,
         isArchived: false,
+        isNew: true,
       };
 
   const form = useForm<ProductFormValues>({
@@ -418,6 +420,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
+            <div />
             <FormField
               control={form.control}
               name="isFeatured"
@@ -441,6 +444,28 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             />
             <FormField
               control={form.control}
+              name="isNew"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      // @ts-ignore
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>New</FormLabel>
+                    <FormDescription>
+                      This product will appear on the home screen new products
+                      section.
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="isArchived"
               render={({ field }) => (
                 <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
@@ -452,9 +477,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     />
                   </FormControl>
                   <div className="space-y-1 leading-none">
-                    <FormLabel>Archived</FormLabel>
+                    <FormLabel>Is archived?</FormLabel>
                     <FormDescription>
-                      This product will not appear anywhere in the store.
+                      This product will not appear in the webshop.
                     </FormDescription>
                   </div>
                 </FormItem>
